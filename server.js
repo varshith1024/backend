@@ -5,7 +5,7 @@ const User=require('./models/User')
 const bcrypt=require('bcryptjs')
 
 const app=express()
-const PORT=3000
+const PORT=3005
 app.use(express.json());
 
 //homepage
@@ -13,7 +13,7 @@ app.get('/',(req,res)=>{
     res.send('')
 })
 
-//signup
+//register
 app.post('/register',async(req,res)=>{
     const {username,email,password}=req.body
     try{
@@ -27,6 +27,23 @@ app.post('/register',async(req,res)=>{
     catch(err)
     {
         console.log(err)
+    }
+})
+//login
+app.post('/login',async(req,res)=>{
+    const {email,password}=req.body 
+    try{
+        const user=await User.findOne({email});
+        if(!user || !(await bcrypt.compare(password,user.password)))
+        {
+            return res.status(400).json({message:"Invalid Credentials"});
+        }
+    res.json({message:"Login Successfull",Username:user.username});
+
+    }
+    catch(err)
+    {
+      console.log(err)
     }
 })
 
