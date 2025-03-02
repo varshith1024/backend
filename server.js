@@ -3,7 +3,7 @@ const mongoose=require('mongoose')
 require('dotenv').config()
 const User=require('./models/User')
 const bcrypt=require('bcryptjs')
-
+const AddRecipe=require('./models/AddRecipe')
 const app=express()
 const PORT=3005
 app.use(express.json());
@@ -45,6 +45,22 @@ app.post('/login',async(req,res)=>{
     {
       console.log(err)
     }
+})
+    //AddRecipe
+    app.post('/add',async(req,res)=>{
+        const {Recipe_title,Ingredients,Instructions,Cooking_time}=req.body
+        try{
+            const addrecipe=new AddRecipe({Recipe_title,Ingredients,Instructions,Cooking_time})
+            await addrecipe.save()
+            res.json({message:"Recipe Added"})
+            console.log("Recipe added Successfully")
+        }
+        catch(err){
+            console.log(err)
+
+        }
+
+    
 })
 
 
